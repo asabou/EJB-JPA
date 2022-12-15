@@ -1,0 +1,40 @@
+plugins {
+    id 'war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+def server = System.getProperty("server");
+
+if (server == null) {
+//    throw new Exception("No server was specified in client!")
+}
+
+war {
+    if (server == "wildfly") {
+        rootSpec.exclude('**/glassfish/**')
+    }
+    if (server == "glassfish") {
+        rootSpec.exclude('**/wildfly/**')
+    }
+}
+
+dependencies {
+    if (server == "wildfly") {
+        // https://mvnrepository.com/artifact/org.wildfly/wildfly-ejb-client-bom
+        implementation group: 'org.wildfly', name: 'wildfly-ejb-client-bom', version: '27.0.0.Final', ext: 'pom'
+    }
+    // https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
+    implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '2.1.1'
+    // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.3'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.3'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+}
